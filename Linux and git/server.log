@@ -1,0 +1,52 @@
+2026-10-15 INFO User1 login successful
+2026-10-15 ERROR User2 database connection failed
+2026-10-15 INFO User3 checkout complete
+
+
+
+#linux commands for examples:
+
+grep "ERROR" server.log
+# Output: 2026-10-15 ERROR User2 database connection failed
+
+
+awk '{print $1, $3}' server.log
+
+#Find and replace
+sed 's/ERROR/CRITICAL/g' server.log
+
+
+#cron jobs:
+These jobs run automatically so that we dont have to do it manually 
+
+eg:
+#!/bin/bash
+
+# Define variables
+SOURCE_DIR="/var/www/html"
+BACKUP_DIR="/backup"
+
+# Conditional Check (If directory exists)
+if [ -d "$SOURCE_DIR" ]; then
+    echo "Starting backup of $SOURCE_DIR..."
+    tar -czf "$BACKUP_DIR/backup_$(date +%F).tar.gz" "$SOURCE_DIR"
+    echo "Backup complete!"
+else
+    echo "Error: Source directory does not exist."
+    exit 1
+fi
+
+
+# Open cron editor using: crontab -e
+0 0 * * * /bin/bash /scripts/backup.sh
+
+
+# Set a temporary environment variable
+export DB_PASSWORD="SuperSecretPassword123"
+
+# Access it in terminal or code
+echo $DB_PASSWORD
+
+# Make it permanent by adding it to your user profile
+echo 'export DB_PASSWORD="SuperSecretPassword123"' >> ~/.bashrc
+source ~/.bashrc
